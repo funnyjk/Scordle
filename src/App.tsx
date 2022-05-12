@@ -1,25 +1,43 @@
-import { hot } from "react-hot-loader";
-import React from "react";
+import React, { useEffect } from "react";
+import { useAppSelector, useAppDispatch } from './app/hooks';
+import { addPlayerScoreCard } from "./features/playerScoreCards/playerScoreCardsSlice";
+
+
+import { players } from "../tmp/scores";
+
+import Battery from "./components/Battery";
+import { createPlayerScoreCards, sumLikeProps } from "./functions/entryManipulation";
+import ScoreCard from "./components/ScoreCard";
+
+type Entries<T> = {
+    [K in keyof T]: [K, T[K]];
+}[keyof T][];
 
 const App = () => {
-    const [count, setCount] = React.useState<number>(0);
+    const playerScoreCards = useAppSelector((state)  => state.players.playerScoreCards)
+    const dispatch = useAppDispatch();
 
-    const increment = () => {
-        setCount((count) => count + 1);
-    }
+    useEffect(() => {
+        players.map((player) => {
+            dispatch(addPlayerScoreCard( player ))
+        })
+    },[]);
 
-    const decrement = () => {
-        setCount((count) => count - 1);
-    }
+    // let playerScoreCards: Array<PlayerScoreCard> = []
 
+
+    // console.log(playerScoreCards);
+    
     return (
-        <div>
-            <h2>Number: <b>{count}</b></h2>
-            <br /><br />
-            <button onClick={() => increment()}>Increment</button>{' '}
-            <button onClick={() => decrement()}>Decrement</button>{' '}
+        <div key="App">
+            {/* <Battery/> */}
+            { playerScoreCards.map((scoreCard, indx) =>
+                <React.Fragment key={'scoreCard_'+indx}>
+                    <ScoreCard scoreCard={scoreCard}/>
+                </React.Fragment>
+            )}
         </div>
     );
 };
 
-export default hot(module)(App);
+export default App;

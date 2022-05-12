@@ -1,15 +1,10 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
-const ReactRefreshTypeScript = require('react-refresh-typescript');
 const path = require("path");
 
-const isDevelopment = process.env.NODE_ENV !== 'production';
-
 module.exports = {
-  
   entry: "./src/index.tsx",
   devtool: "source-map",
-  mode: isDevelopment ? 'development' : 'production',
+  mode: "development",
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "bundle.js"
@@ -26,12 +21,6 @@ module.exports = {
       {
         test: /\.(ts|tsx)?$/,
         loader: "ts-loader",
-        options: {
-          getCustomTransformers: () => ({
-            before: [isDevelopment && ReactRefreshTypeScript()].filter(Boolean),
-          }),
-          transpileOnly: isDevelopment,
-        },
         exclude: /node_modules/
       },
         {
@@ -44,7 +33,7 @@ module.exports = {
             // Compiles Sass to CSS
             "sass-loader",
           ],
-        },
+        }
     ]
   },
   resolve: {
@@ -59,5 +48,5 @@ module.exports = {
     template: "public/index.html",
     hash: true, // cache busting
     filename: '../dist/index.html'
-  }), isDevelopment && new ReactRefreshWebpackPlugin()].filter(Boolean)
+  })]
 }
